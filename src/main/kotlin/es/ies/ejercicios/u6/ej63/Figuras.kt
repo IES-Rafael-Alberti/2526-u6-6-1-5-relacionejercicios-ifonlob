@@ -42,8 +42,8 @@ class Rectangulo(
         println("[Rectangulo:secondary] constructor(ancho, alto)")
     }
 
-    constructor(ancho : Int) : this(color="sin-color",etiqueta="rectangulo",ancho,alto = ancho){
-        println("[Cuadrado:secondary] constructor(ancho)")
+    constructor(lado : Int) : this(color="sin-color",etiqueta="rectangulo",ancho = lado,alto = lado){
+        println("[Rectangulo:secondary] constructor(lado)")
     }
 }
 
@@ -56,7 +56,9 @@ class Circulo(
         println("[Circulo:init] radio=$radio")
     }
 
-    // TODO: añade al menos un constructor secundario que delegue con this(...)
+    constructor(radio : Int) : this(color="sin-color",etiqueta="circulo",radio){
+        println("[Circulo:secondary] constructor(radio)")
+    }
 }
 
 /*
@@ -68,13 +70,12 @@ al constructor de la clase padre.
 Instrucciones:
 - Descomenta el código.
 - Rellena el hueco `________` con la delegación correcta al constructor padre.
-- Sustituye los `TODO(...)` por valores/argumentos adecuados.
-
+*/
 class Triangulo : Figura {
     val base: Int
     val altura: Int
 
-    constructor(base: Int, altura: Int) : ________ {
+    constructor(base: Int, altura: Int) : super(color="sin-color",etiqueta="triangulo"){
         println("[Triangulo:secondary] constructor(base, altura) -> constructor padre")
         this.base = base
         this.altura = altura
@@ -84,4 +85,4 @@ class Triangulo : Figura {
         println("[Triangulo:secondary] constructor(lado) -> this(base, altura)")
     }
 }
-*/
+
