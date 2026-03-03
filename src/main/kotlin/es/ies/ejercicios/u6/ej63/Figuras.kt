@@ -42,7 +42,9 @@ class Rectangulo(
         println("[Rectangulo:secondary] constructor(ancho, alto)")
     }
 
-    // TODO: añade otro constructor secundario que cree un cuadrado (lado -> ancho=alto)
+    constructor(ancho : Int) : this(color="sin-color",etiqueta="rectangulo",ancho,alto = ancho){
+        println("[Cuadrado:secondary] constructor(ancho)")
+    }
 }
 
 class Circulo(
