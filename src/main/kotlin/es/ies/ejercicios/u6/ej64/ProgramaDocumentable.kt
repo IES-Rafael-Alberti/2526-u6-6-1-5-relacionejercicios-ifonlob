@@ -13,6 +13,9 @@ package es.ies.ejercicios.u6.ej64
 
 /**
  * Representa un elemento que puede generar un resumen en texto.
+ *
+ * Presenta un método abstracto que permite resumir a las clases que lo implementen.
+ *
  */
 interface Resumible {
     fun resumen(): String
@@ -28,6 +31,15 @@ interface Resumible {
  * y permitir que las subclases solo personalicen las partes variables.
  */
 abstract class PlantillaInforme : Resumible {
+    /**
+     * Genera el informe a partir de una cabecera, una lista de resumibles y un pie de página.
+     *
+     * Utiliza la clase StringBuilder para montar el informe.
+     *
+     * @param titulo El título de la cabecera del informe
+     * @param items Lista de objetos que son resumibles
+     * @return El informe completo
+     */
     fun generar(titulo: String, items: List<Resumible>): String {
         // Crea el StringBuilder
         val sb = StringBuilder()
