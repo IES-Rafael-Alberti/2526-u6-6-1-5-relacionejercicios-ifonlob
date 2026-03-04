@@ -63,12 +63,25 @@ abstract class PlantillaInforme : Resumible {
     override fun resumen(): String = "PlantillaInforme"
 }
 
+/**
+ * Indica el formato para la escritura del informe en Markdown
+ *
+ * Sobrescribe los métodos open de la clase padre PlantillaInforme adaptándolos al formato correspondiente
+ * Nótese que hace uso de el método resumen con la implementación de la clase padre debido a que todo método override es open por defecto,
+ * evitando duplicidad de código.
+ */
 class InformeMarkdown : PlantillaInforme() {
     override fun cabecera(titulo: String): String = "# $titulo"
 
     override fun formatearItem(item: Resumible): String = "- ${item.resumen()}"
 }
-
+/**
+ * Indica el formato para la escritura del informe en Csv
+ *
+ * Sobrescribe los métodos open de la clase padre PlantillaInforme adaptándolos al formato correspondiente
+ * Nótese que hace uso de el método resumen con la implementación de la clase padre debido a que todo método override es open por defecto,
+ * evitando duplicidad de código.
+ */
 class InformeCsv : PlantillaInforme() {
     override fun cabecera(titulo: String): String = "titulo,$titulo\nitem"
 
