@@ -135,18 +135,23 @@ class Alumno : Persona {
 }
 
 /**
- * Ejemplo para discutir "comentarios importantes":
+ * Permite registrar personas, normalizar y buscar por nombre.
  *
  * Se normaliza el nombre para evitar registros duplicados por diferencias de espacios o mayúsculas/minúsculas.
  */
 class RegistroPersonas {
     private val personasPorNombre = mutableMapOf<String, Persona>()
 
+    /**
+     * Registra personas y las añade a un mapa por su clave.
+     *
+     * La clave se obtiene a partir de la normalización del nombre de la persona
+     * @param persona Entidad de tipo Persona a la cual se va a registrar
+     */
     fun registrar(persona: Persona) {
         val clave = normalizarNombre(persona.nombre)
         personasPorNombre[clave] = persona
     }
-
     fun buscar(nombre: String): Persona? = personasPorNombre[normalizarNombre(nombre)]
 
     private fun normalizarNombre(nombre: String): String {
