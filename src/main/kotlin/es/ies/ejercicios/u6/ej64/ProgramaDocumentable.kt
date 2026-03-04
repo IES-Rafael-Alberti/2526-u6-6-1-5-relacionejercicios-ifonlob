@@ -38,7 +38,7 @@ abstract class PlantillaInforme : Resumible {
      *
      * @param titulo El título de la cabecera del informe
      * @param items Lista de objetos que son resumibles
-     * @return El informe completo
+     * @return El informe completo montado con StringBuilder
      */
     fun generar(titulo: String, items: List<Resumible>): String {
         // Crea el StringBuilder
@@ -147,6 +147,7 @@ class RegistroPersonas {
      *
      * La clave se obtiene a partir de la normalización del nombre de la persona
      * @param persona Entidad de tipo Persona a la cual se va a registrar
+     * @return Unit
      */
     fun registrar(persona: Persona) {
         val clave = normalizarNombre(persona.nombre)
