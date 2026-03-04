@@ -141,11 +141,12 @@ class RegistroPersonas {
      */
     fun registrar(persona: Persona) {
         val clave = normalizarNombre(persona.nombre)
-        personasPorNombre[clave] = persona
+        personasPorNombre[clave] = persona // Sobrescribe si clave duplicada: última Persona gana
     }
     fun buscar(nombre: String): Persona? = personasPorNombre[normalizarNombre(nombre)]
 
     private fun normalizarNombre(nombre: String): String {
+         // Normaliza case-insensitive/trim para búsquedas unificadas
         return nombre.trim().lowercase()
     }
 }
