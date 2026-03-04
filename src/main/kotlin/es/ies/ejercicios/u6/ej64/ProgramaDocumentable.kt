@@ -41,7 +41,6 @@ abstract class PlantillaInforme : Resumible {
      * @return El informe completo montado con StringBuilder
      */
     fun generar(titulo: String, items: List<Resumible>): String {
-        // Crea el StringBuilder
         val sb = StringBuilder()
 
         sb.appendLine(cabecera(titulo))
@@ -51,7 +50,7 @@ abstract class PlantillaInforme : Resumible {
         }
 
         sb.appendLine(pie())
-        return sb.toString() // devolver el string
+        return sb.toString()
     }
 
     protected open fun cabecera(titulo: String): String = titulo
@@ -122,7 +121,6 @@ class Alumno : Persona {
     val curso: String
 
     constructor(nombre: String, edad: Int, curso: String) : super(nombre, edad) {
-        // Asignar curso
         this.curso = curso
         println("[Alumno:secondary] nombre=$nombre edad=$edad curso=$curso")
     }
