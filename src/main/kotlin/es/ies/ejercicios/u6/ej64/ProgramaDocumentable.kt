@@ -76,7 +76,7 @@ class InformeMarkdown : PlantillaInforme() {
     override fun formatearItem(item: Resumible): String = "- ${item.resumen()}"
 }
 /**
- * Indica el formato para la escritura del informe en Csv
+ * Indica el formato para la escritura del informe en CSV
  *
  * Sobrescribe los métodos open de la clase padre PlantillaInforme adaptándolos al formato correspondiente
  * Nótese que hace uso de el método resumen con la implementación de la clase padre debido a que todo método override es open por defecto,
@@ -88,6 +88,15 @@ class InformeCsv : PlantillaInforme() {
     override fun formatearItem(item: Resumible): String = item.resumen().replace(",", ";")
 }
 
+/**
+ * Representa a la entidad Persona
+ *
+ * Implementa el método resumible, permitiendo generar un resumen de la Persona
+ *
+ * @property nombre El nombre de la persona
+ * @property edad La edad de la persona
+ * @constructor Crea una persona con su nombre y edad
+ */
 open class Persona(
     val nombre: String,
     val edad: Int,
@@ -102,7 +111,13 @@ open class Persona(
 
     override fun resumen(): String = "$nombre ($edad)"
 }
-
+/**
+ * Representa a la entidad Alumno.
+ *
+ * Sobrescribe el método resumible a partir de la implementación de la clase padre, añadiendo el dato del curso.
+ *
+ * @property curso El curso en el que se encuentra el alumno
+ */
 class Alumno : Persona {
     val curso: String
 
