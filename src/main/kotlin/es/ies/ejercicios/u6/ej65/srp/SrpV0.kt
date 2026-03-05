@@ -58,13 +58,16 @@ class InformeAppServiceV1(private val recopiladorDatos: RecopiladorDatos, privat
         println("[SRP:v1] Generando informe...")
         val salida = plantillaInforme.generar("Listado", items)
         print(salida)
-        }
+    }
 }
 
 
 fun main() {
-    val informe = InformeAppServiceV1(RecopiladorDatos(),)
-    ejecutar()
+    val recopilador = RecopiladorDatos()
+    val registro = RegistroPersonas()
+    val plantillaMarkdown = InformeMarkdown()
+    val appService = InformeAppServiceV1(recopilador, registro, plantillaMarkdown)
+    appService.ejecutar()
 }
 
 
