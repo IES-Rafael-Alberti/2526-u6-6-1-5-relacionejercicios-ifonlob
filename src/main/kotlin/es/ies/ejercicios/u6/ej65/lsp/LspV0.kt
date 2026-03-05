@@ -5,40 +5,44 @@ import es.ies.ejercicios.u6.ej64.Persona
 /**
  * Contrato: un repositorio que permite guardar y buscar personas.
  */
-open class RepositorioPersonasV0 {
+
+interface Guardable{
+    fun guardar(persona: Persona)
+}
+
+interface Buscable {
+    fun buscar(nombre: String) : Persona?
+}
+open class RepositorioPersonasV1: Buscable, Guardable {
     private val map = mutableMapOf<String, Persona>()
 
-    open fun guardar(persona: Persona) {
+    override fun guardar(persona: Persona) {
         map[persona.nombre] = persona
     }
 
-    open fun buscar(nombre: String): Persona? = map[nombre]
+    override fun buscar(nombre: String): Persona? = map[nombre]
 }
 
-/**
- * v0 (posible violación de LSP): una subclase rompe el contrato esperado de "guardar".
- * El código cliente que acepta [RepositorioPersonasV0] puede fallar al sustituirlo por esta subclase.
- */
-class RepositorioSoloLecturaV0 : RepositorioPersonasV0() {
-    override fun guardar(persona: Persona) {
-        throw UnsupportedOperationException("Repositorio en modo solo lectura")
-    }
+class RepositorioSoloLecturaV1(private val map : Map<String, Persona>) : Buscable {
+    override fun buscar(nombre: String): Persona? = map[nombre]
 }
 
-fun cliente(repo: RepositorioPersonasV0) {
-    repo.guardar(Persona("Ana", 20))
+fun clienteBuscador(repo: Buscable) {
     println("Buscar Ana -> ${repo.buscar("Ana")?.resumen()}")
 }
 
-fun main() {
-    println("[LSP:v0] Repositorio normal (ok)")
-    cliente(RepositorioPersonasV0())
-
-    println("\n[LSP:v0] Repositorio solo lectura (rompe sustitución)")
-    try {
-        cliente(RepositorioSoloLecturaV0())
-    } catch (e: Exception) {
-        println("ERROR: ${e::class.simpleName}: ${e.message}")
-    }
+fun clienteEscritor(repo: Guardable) {
+    repo.guardar(Persona("Ana", 20))
+    println("Ana ha sido guardada.")
 }
 
+fun main() {
+    val repoCompleto = RepositorioPersonasV1()
+    clienteEscritor(repoCompleto)
+    clienteBuscador(repoCompleto)
+
+    val datosPreexistentes = mapOf("Ana" to Persona("Ana", 20))
+    val repoLectura = RepositorioSoloLecturaV1(datosPreexistentes)
+
+    clienteBuscador(repoLectura)
+}
