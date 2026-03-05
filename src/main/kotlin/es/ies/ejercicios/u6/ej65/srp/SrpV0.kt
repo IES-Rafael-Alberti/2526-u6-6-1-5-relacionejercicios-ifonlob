@@ -49,13 +49,10 @@ class RecopiladorDatos() {
 }
 class InformeAppServiceV1(private val recopiladorDatos: RecopiladorDatos, private val registroPersonas: RegistroPersonas, private val plantillaInforme: PlantillaInforme){
     fun ejecutar(){
-        println("[SRP:v1] Preparando datos...")
         val items = recopiladorDatos.obtenerDatos()
-        println("[SRP:v1] Registrando personas...")
         items.forEach{ item ->
                if (item is Persona) registroPersonas.registrar(item)
             }
-        println("[SRP:v1] Generando informe...")
         val salida = plantillaInforme.generar("Listado", items)
         print(salida)
     }
