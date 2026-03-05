@@ -1,10 +1,6 @@
 package es.ies.ejercicios.u6.ej65.srp
 
-import es.ies.ejercicios.u6.ej64.Alumno
-import es.ies.ejercicios.u6.ej64.InformeMarkdown
-import es.ies.ejercicios.u6.ej64.Persona
-import es.ies.ejercicios.u6.ej64.RegistroPersonas
-import es.ies.ejercicios.u6.ej64.Resumible
+import es.ies.ejercicios.u6.ej64.*
 
 /**
  * v0 (mejorable): demasiadas responsabilidades mezcladas:
@@ -13,6 +9,7 @@ import es.ies.ejercicios.u6.ej64.Resumible
  * - genera informe
  * - hace logs
  */
+/*
 class InformeAppServiceV0 {
     fun ejecutar() {
         println("[SRP:v0] Preparando datos...")
@@ -38,8 +35,36 @@ class InformeAppServiceV0 {
         println("[SRP:v0] Buscar 'ana' -> ${registro.buscar("ana")?.resumen()}")
     }
 }
+*/
+
+class RecopiladorDatos() {
+    fun obtenerDatos(): List<Resumible> {
+        return listOf(
+            Persona(" Ana ", 20),
+            Alumno("Luis", 19, "1DAM"),
+            Persona("Marta", 18)
+        )
+
+    }
+}
+class InformeAppServiceV1(private val recopiladorDatos: RecopiladorDatos, private val registroPersonas: RegistroPersonas, private val plantillaInforme: PlantillaInforme){
+    fun ejecutar(){
+        println("[SRP:v1] Preparando datos...")
+        val items = recopiladorDatos.obtenerDatos()
+        println("[SRP:v1] Registrando personas...")
+        items.forEach{ item ->
+               if (item is Persona) registroPersonas.registrar(item)
+            }
+        println("[SRP:v1] Generando informe...")
+        val salida = plantillaInforme.generar("Listado", items)
+        print(salida)
+        }
+}
+
 
 fun main() {
-    InformeAppServiceV0().ejecutar()
+    val informe = InformeAppServiceV1(RecopiladorDatos(),)
+    ejecutar()
 }
+
 
