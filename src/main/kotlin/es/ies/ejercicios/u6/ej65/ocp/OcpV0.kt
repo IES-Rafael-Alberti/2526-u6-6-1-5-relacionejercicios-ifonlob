@@ -2,35 +2,38 @@ package es.ies.ejercicios.u6.ej65.ocp
 
 import es.ies.ejercicios.u6.ej64.Resumible
 
-enum class FormatoInformeV0 {
-    CSV,
-    MARKDOWN,
-    // TODO (ejercicio): cuando quieras añadir otro formato, v0 te obliga a modificar este enum y el `when`.
+interface Generable{
+    fun generar(titulo: String, items: List<Resumible>) : String
 }
 
-/**
- * v0 (viola OCP): para añadir un nuevo formato hay que modificar este `when`.
- */
-class GeneradorInformeV0 {
-    fun generar(formato: FormatoInformeV0, titulo: String, items: List<Resumible>): String =
-        when (formato) {
-            FormatoInformeV0.CSV -> generarCsv(titulo, items)
-            FormatoInformeV0.MARKDOWN -> generarMarkdown(titulo, items)
+class FormatoMarkdown : Generable{
+    override fun generar(titulo: String, items: List<Resumible>) : String {
+        val informe = buildString {
+            appendLine("# $titulo")
+            for (item in items) appendLine("- ${item.resumen()}")
         }
-
-    private fun generarCsv(titulo: String, items: List<Resumible>): String =
-        buildString {
+        return informe
+    }
+}
+class FormatoCsv : Generable{
+    override fun generar(titulo: String, items: List<Resumible>) : String{
+        val informe = buildString {
             appendLine("titulo,$titulo")
             appendLine("item")
             for (item in items) appendLine(item.resumen().replace(",", ";"))
         }
-
-    private fun generarMarkdown(titulo: String, items: List<Resumible>): String =
-        buildString {
-            appendLine("# $titulo")
-            for (item in items) appendLine("- ${item.resumen()}")
-        }
+        return informe
+    }
 }
+
+class GeneradorInformeV1(val generable : Generable) {
+    fun generarInforme(titulo: String, items: List<Resumible>) : String{
+        val informe = generable.generar(titulo, items)
+        return informe
+    }
+}
+
+
 
 fun main() {
     val items = listOf<Resumible>(
@@ -39,10 +42,19 @@ fun main() {
         },
         object : Resumible {
             override fun resumen(): String = "Elemento B"
-        },
+        }
     )
 
-    val generador = GeneradorInformeV0()
-    println(generador.generar(FormatoInformeV0.MARKDOWN, "Demo OCP", items))
+    println("=== Prueba Formato Markdown ===")
+    val formatoMarkdown = FormatoMarkdown()
+    val generadorMarkdown = GeneradorInformeV1(formatoMarkdown)
+    val informeMarkdown = generadorMarkdown.generarInforme("Prueba", items)
+    println(informeMarkdown)
+
+    println("\n=== Prueba Formato CSV ===")
+    val formatoCsv = FormatoCsv()
+    val generadorCsv = GeneradorInformeV1(formatoCsv)
+    val informeCsv = generadorCsv.generarInforme("Prueba", items)
+    println(informeCsv)
 }
 

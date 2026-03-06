@@ -13,6 +13,9 @@ package es.ies.ejercicios.u6.ej64
 
 /**
  * Representa un elemento que puede generar un resumen en texto.
+ *
+ * Presenta un método abstracto que permite resumir a las clases que lo implementen.
+ *
  */
 interface Resumible {
     fun resumen(): String
@@ -28,8 +31,16 @@ interface Resumible {
  * y permitir que las subclases solo personalicen las partes variables.
  */
 abstract class PlantillaInforme : Resumible {
+    /**
+     * Genera el informe a partir de una cabecera, una lista de resumibles y un pie de página.
+     *
+     * Utiliza la clase StringBuilder para montar el informe.
+     *
+     * @param titulo El título de la cabecera del informe
+     * @param items Lista de objetos que son resumibles
+     * @return El informe completo montado con StringBuilder
+     */
     fun generar(titulo: String, items: List<Resumible>): String {
-        // Crea el StringBuilder
         val sb = StringBuilder()
 
         sb.appendLine(cabecera(titulo))
@@ -39,7 +50,7 @@ abstract class PlantillaInforme : Resumible {
         }
 
         sb.appendLine(pie())
-        return sb.toString() // devolver el string
+        return sb.toString()
     }
 
     protected open fun cabecera(titulo: String): String = titulo
@@ -51,18 +62,32 @@ abstract class PlantillaInforme : Resumible {
     override fun resumen(): String = "PlantillaInforme"
 }
 
+/**
+ * Formato Markdown para informes: listas con "-"
+ */
 class InformeMarkdown : PlantillaInforme() {
     override fun cabecera(titulo: String): String = "# $titulo"
 
     override fun formatearItem(item: Resumible): String = "- ${item.resumen()}"
 }
-
+/**
+ * Formato CSV para informes: sustitución de  , por ;
+ */
 class InformeCsv : PlantillaInforme() {
     override fun cabecera(titulo: String): String = "titulo,$titulo\nitem"
 
     override fun formatearItem(item: Resumible): String = item.resumen().replace(",", ";")
 }
 
+/**
+ * Representa a la entidad Persona
+ *
+ * Implementa el método resumible, permitiendo generar un resumen de la Persona
+ *
+ * @property nombre El nombre de la persona
+ * @property edad La edad de la persona
+ * @constructor Crea una persona con su nombre y edad
+ */
 open class Persona(
     val nombre: String,
     val edad: Int,
@@ -77,12 +102,17 @@ open class Persona(
 
     override fun resumen(): String = "$nombre ($edad)"
 }
-
+/**
+ * Representa a la entidad Alumno.
+ *
+ * Sobrescribe el método resumible a partir de la implementación de la clase padre, añadiendo el dato del curso.
+ *
+ * @property curso El curso en el que se encuentra el alumno
+ */
 class Alumno : Persona {
     val curso: String
 
     constructor(nombre: String, edad: Int, curso: String) : super(nombre, edad) {
-        // Asignar curso
         this.curso = curso
         println("[Alumno:secondary] nombre=$nombre edad=$edad curso=$curso")
     }
@@ -95,21 +125,28 @@ class Alumno : Persona {
 }
 
 /**
- * Ejemplo para discutir "comentarios importantes":
+ * Permite registrar personas, normalizar y buscar por nombre.
  *
  * Se normaliza el nombre para evitar registros duplicados por diferencias de espacios o mayúsculas/minúsculas.
  */
 class RegistroPersonas {
     private val personasPorNombre = mutableMapOf<String, Persona>()
 
+    /**
+     * Registra personas y las añade a un mapa por su clave.
+     *
+     * La clave se obtiene a partir de la normalización del nombre de la persona
+     * @param persona Entidad de tipo Persona a la cual se va a registrar
+     * @return Unit
+     */
     fun registrar(persona: Persona) {
         val clave = normalizarNombre(persona.nombre)
-        personasPorNombre[clave] = persona
+        personasPorNombre[clave] = persona // Sobrescribe si clave duplicada: última Persona gana
     }
-
     fun buscar(nombre: String): Persona? = personasPorNombre[normalizarNombre(nombre)]
 
     private fun normalizarNombre(nombre: String): String {
+         // Normaliza case-insensitive/trim para búsquedas unificadas
         return nombre.trim().lowercase()
     }
 }
