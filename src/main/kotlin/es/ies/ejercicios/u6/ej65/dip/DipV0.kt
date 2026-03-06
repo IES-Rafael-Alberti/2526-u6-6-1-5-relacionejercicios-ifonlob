@@ -1,16 +1,13 @@
 package es.ies.ejercicios.u6.ej65.dip
 
-import es.ies.ejercicios.u6.ej64.InformeCsv
-import es.ies.ejercicios.u6.ej64.Persona
-import es.ies.ejercicios.u6.ej64.Resumible
+import es.ies.ejercicios.u6.ej64.*
 
 /**
  * v0 (viola DIP): un módulo de alto nivel depende de un detalle concreto: [InformeCsv].
  * El ejercicio consiste en introducir una abstracción e inyectar dependencias.
  */
-class ControladorInformesV0 {
-    private val generador = InformeCsv() // detalle concreto
 
+class ControladorInformes(val generador : PlantillaInforme){
     fun imprimirListado(items: List<Resumible>) {
         val salida = generador.generar("Listado DIP", items)
         println(salida)
@@ -18,7 +15,7 @@ class ControladorInformesV0 {
 }
 
 fun main() {
-    val controller = ControladorInformesV0()
+    val controller = ControladorInformes(InformeCsv())
     controller.imprimirListado(
         listOf(
             Persona("Ana", 20),
